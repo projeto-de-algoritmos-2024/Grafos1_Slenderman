@@ -12,6 +12,7 @@ class Game:
 
         self.character_spritesheet = Spritesheet ('img/character.png')
         self.terrain_spritesheet = Spritesheet ('img/terrain.png')
+        self.enemy_spritesheet = Spritesheet ('img/enemy.png')
 
     def createTilemap(self):
         for i, row in enumerate(tilemap):
@@ -19,6 +20,8 @@ class Game:
                 Ground(self,j,i)
                 if column == 'B':
                     Block (self, j, i)
+                if column == 'E':
+                    Enemy(self,j,i)
                 if column == 'P':
                     Player (self,j,i)
 
@@ -27,7 +30,7 @@ class Game:
 
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.blocks = pygame.sprite.LayeredUpdates()
-        self.slenderman = pygame.sprite.LayeredUpdates()
+        self.enemies = pygame.sprite.LayeredUpdates()
         self.attacks = pygame.sprite.LayeredUpdates()
 
         self.createTilemap()
