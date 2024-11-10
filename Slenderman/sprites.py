@@ -54,24 +54,16 @@ class Player(pygame.sprite.Sprite):
     def movement (self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            for sprite in self.game.all_sprites:
-                sprite.rect.x += PLAYER_SPEED
-            self.x_change -= PLAYER_SPEED
+            self.x_change = -PLAYER_SPEED
             self.facing = 'left'
         if keys [pygame.K_RIGHT]:
-            for sprite in self.game.all_sprites:
-                sprite.rect.x -= PLAYER_SPEED
-            self.x_change += PLAYER_SPEED
+            self.x_change = PLAYER_SPEED
             self.facing = 'right'
         if keys [pygame.K_UP]:
-            for sprite in self.game.all_sprites:
-                sprite.rect.y += PLAYER_SPEED
-            self.y_change -= PLAYER_SPEED
+            self.y_change = -PLAYER_SPEED
             self.facing = 'up'
         if keys [pygame.K_DOWN]:
-            for sprite in self.game.all_sprites:
-                sprite.rect.y -= PLAYER_SPEED
-            self.y_change += PLAYER_SPEED
+            self.y_change = PLAYER_SPEED
             self.facing = 'down'
 
     def collide_enemy(self):
@@ -253,10 +245,6 @@ class Enemy (pygame.sprite.Sprite):
                 self.animation_loop += 0.1
                 if self.animation_loop >= 3:
                     self.animation_loop = 1
-
-
-
-
 
 class Block(pygame.sprite.Sprite):
     def __init__ (self,game,x,y):
