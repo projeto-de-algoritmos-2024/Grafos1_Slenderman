@@ -38,6 +38,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+
+        self.moving = False
         
     def update(self):
         self.movement()
@@ -67,6 +69,12 @@ class Player(pygame.sprite.Sprite):
         if keys [pygame.K_DOWN]:
             self.y_change = PLAYER_SPEED
             self.facing = 'down'
+
+        if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]):
+            self.moving = False
+
+        self.rect.x += self.x_change
+        self.rect.y += self.y_change
 
     def collide_enemy(self):
         hits = pygame.sprite.spritecollide(self, self.game.enemies, False)

@@ -21,6 +21,19 @@ class Game:
         self.go_background = pygame.image.load('./img/gameover.png')
         self.notes_spritesheet = Spritesheet ('./img/paper.png')
 
+        self.lantern_radius = 200  # Raio da lanterna
+        self.lantern_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))  # Superfície para a lanterna
+        self.lantern_surface.fill((0, 0, 0))
+
+    def draw_lantern(self, player):
+        # Criar um círculo transparente onde a lanterna ilumina
+        self.lantern_surface.fill((0, 0, 0))  # Limpa a superfície
+        pygame.draw.circle(self.lantern_surface, (0, 0, 0), (player.rect.centerx, player.rect.centery), self.lantern_radius)
+        self.lantern_surface.set_colorkey((0, 0, 0))  # Define a cor preta como transparente
+        
+        # Desenhar a máscara de lanterna sobre a tela
+        self.screen.blit(self.lantern_surface, (0, 0))
+
     def createTilemap(self):
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
@@ -60,9 +73,12 @@ class Game:
 
     def update(self):
         self.all_sprites.update()
+        if self.player.rect.centerx or self.player.rect.centery:  # Verifica se o jogador está se movendo
+            self.draw_lantern(self.player)
     
     def draw(self):
         self.screen.fill(BLACK)
+        self.draw_lantern(self.player)
         self.all_sprites.draw(self.screen)
 
         score_text = self.font.render(f"{self.notes_collected}/{self.total_notes}", True, WHITE)
