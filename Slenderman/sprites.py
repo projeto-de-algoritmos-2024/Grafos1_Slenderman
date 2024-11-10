@@ -2,6 +2,7 @@ import pygame
 from config import *
 import math
 import random
+from collections import deque
 
 class Spritesheet():
     def __init__ (self, file):
@@ -70,7 +71,9 @@ class Player(pygame.sprite.Sprite):
     def collide_enemy(self):
         hits = pygame.sprite.spritecollide(self, self.game.enemies, False)
         if hits:
-            self.kill()
+            self.game.pages_collected = 0 
+            for enemy in self.game.enemies:
+                enemy.speed = 0
             self.game.playing = False 
 
     def collide_blocks(self, direction):
@@ -166,13 +169,8 @@ class Enemy (pygame.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        self.x_change = 0
-        self.y_change = 0
-
-        self.facing = random.choice(['left', 'right'])
-        self.animation_loop = 1
-        self.movement_loop = 0
-        self.max_travel = random.randint(7, 30)
+        self.path = []
+        self.speed = ENEMY_SPEED
 
         self.image = self.game.enemy_spritesheet.get_sprite(3,2, self.width, self.height)
         self.image.set_colorkey(BLACK)
@@ -181,14 +179,76 @@ class Enemy (pygame.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
-    def update(self):
-        self.movement()
-        self.animate()
-        self.rect.x += self.x_change
-        self.rect.y += self.y_change
-
         self.x_change = 0
         self.y_change = 0
+
+        self.facing = "down"
+
+
+    def update(self):
+        self.speed = ENEMY_SPEED + self.game.notes_collected * 0.1
+        self.find_player()
+        self.move_along_path()
+        self.animate()
+    
+    def find_player(self):
+        # Reinicia o caminho a cada atualização
+        self.path = self.bfs((self.rect.x // TILESIZE, self.rect.y // TILESIZE),
+                             (self.game.player.rect.x // TILESIZE, self.game.player.rect.y // TILESIZE))
+
+    def bfs(self, start, goal):
+        # BFS para encontrar o caminho mais curto até o jogador
+        queue = deque([start])
+        visited = {start: None}
+
+        while queue:
+            current = queue.popleft()
+            if current == goal:
+                break
+
+            x, y = current
+            neighbors = [(x + dx, y + dy) for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]]
+
+            for neighbor in neighbors:
+                if neighbor not in visited and self.is_walkable(*neighbor):
+                    visited[neighbor] = current
+                    queue.append(neighbor)
+
+        path = []
+        while goal and goal in visited:
+            path.append(goal)
+            goal = visited[goal]
+        path.reverse()
+
+        return path[1:] if len(path) > 1 else []  # Retorna o próximo passo
+
+    def is_walkable(self, x, y):
+        # Verifica se a célula é caminhável (não é um bloco)
+        return 0 <= x < len(tilemap[0]) and 0 <= y < len(tilemap) and tilemap[y][x] != 'B'
+
+    def move_along_path(self):
+        # Move o inimigo ao longo do caminho encontrado
+        if self.path:
+            next_x, next_y = self.path[0]
+            next_x *= TILESIZE
+            next_y *= TILESIZE
+
+            dx = next_x - self.rect.x
+            dy = next_y - self.rect.y
+
+            if dx > 0:
+                self.rect.x += min(self.speed, dx)
+            elif dx < 0:
+                self.rect.x += max(-self.speed, dx)
+
+            if dy > 0:
+                self.rect.y += min(self.speed, dy)
+            elif dy < 0:
+                self.rect.y += max(-self.speed, dy)
+
+            # Remove o próximo passo se atingido
+            if self.rect.x == next_x and self.rect.y == next_y:
+                self.path.pop(0)
 
     def movement(self):
         if self.facing == "left":

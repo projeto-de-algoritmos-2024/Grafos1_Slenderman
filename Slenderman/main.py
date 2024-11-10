@@ -9,7 +9,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.font = pygame.font.Font('Slender.ttf', 32)
+        self.font = pygame.font.Font('./Slender.ttf', 32)
 
         self.notes_collected = 0
         self.total_notes = 7
@@ -30,12 +30,16 @@ class Game:
                 if column == 'E':
                     Enemy(self,j,i)
                 if column == 'P':
-                    Player (self,j,i)
+                    self.player = Player (self,j,i)
                 if column == 'N':
                     Note (self,j,i)
 
     def new(self):
         self.playing = True
+
+        self.notes_collected = 0  # Reinicia as páginas coletadas
+        self.pages_collected = 0  # Assegure-se de que o contador de páginas está resetado
+        self.total_notes = 7 
 
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.blocks = pygame.sprite.LayeredUpdates()
@@ -44,6 +48,9 @@ class Game:
         self.notes = pygame.sprite.LayeredUpdates()
 
         self.createTilemap()
+
+        for enemy in self.enemies:
+            enemy.speed = 0  # Ajuste inicial da velocidade do inimigo
 
     def events(self):
         for event in pygame.event.get():
