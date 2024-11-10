@@ -11,12 +11,15 @@ class Game:
         self.running = True
         self.font = pygame.font.Font('Slender.ttf', 32)
 
+        self.notes_collected = 0
+        self.total_notes = 7
+
         self.character_spritesheet = Spritesheet ('img/character.png')
         self.terrain_spritesheet = Spritesheet ('img/terrain.png')
         self.enemy_spritesheet = Spritesheet ('img/enemy.png')
         self.intro_background = pygame.image.load('./img/introbackground.png')
         self.go_background = pygame.image.load('./img/gameover.png')
-
+        self.notes_spritesheet = Spritesheet ('./img/paper.png')
 
     def createTilemap(self):
         for i, row in enumerate(tilemap):
@@ -28,6 +31,8 @@ class Game:
                     Enemy(self,j,i)
                 if column == 'P':
                     Player (self,j,i)
+                if column == 'N':
+                    Note (self,j,i)
 
     def new(self):
         self.playing = True
@@ -36,6 +41,7 @@ class Game:
         self.blocks = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
         self.attacks = pygame.sprite.LayeredUpdates()
+        self.notes = pygame.sprite.LayeredUpdates()
 
         self.createTilemap()
 
@@ -51,6 +57,11 @@ class Game:
     def draw(self):
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
+
+        score_text = self.font.render(f"{self.notes_collected}/{self.total_notes}", True, WHITE)
+        score_rect = score_text.get_rect(topright=(WIN_WIDTH - 10, 10))
+        self.screen.blit(score_text, score_rect)
+
         self.clock.tick(FPS)
         pygame.display.update()
 
@@ -112,6 +123,31 @@ class Game:
             self.screen.blit(play_button.image, play_button.rect)
             self.clock.tick(FPS)
             pygame.display.update()
+
+    def show_victory_screen(self):
+        text = self.font.render('You Won', True, WHITE)
+        text_rect = text.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
+
+        continue_button = Button(10, WIN_HEIGHT - 60, 200, 50, WHITE, BLACK, 'EXIT', 32)
+
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    return
+
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if continue_button.is_pressed(mouse_pos, mouse_pressed):
+                self.running = False  
+
+            self.screen.fill(BLACK)
+            self.screen.blit(text, text_rect)
+            self.screen.blit(continue_button.image, continue_button.rect)
+            pygame.display.update()
+            self.clock.tick(FPS)
+
 
 
 g = Game()

@@ -42,6 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.movement()
         self.animate()
         self.collide_enemy()
+        self.collide_note()
 
         self.rect.x += self.x_change
         self.collide_blocks('x')
@@ -88,6 +89,15 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y = hits[0].rect.top - self.rect.height
                 if self.y_change < 0:
                     self.rect.y = hits[0].rect.bottom
+
+    def collide_note(self):
+        hits = pygame.sprite.spritecollide(self, self.game.notes, True)
+        if hits:
+            self.game.notes_collected += 1
+
+            if self.game.notes_collected == self.game.total_notes:
+                self.game.playing = False 
+                self.game.show_victory_screen()
 
     def animate(self):
         down_animations = [self.game.character_spritesheet.get_sprite(3, 2, self.width, self.height),
@@ -282,6 +292,26 @@ class Ground (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+
+class Note (pygame.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.game = game
+        self._layer = BLOCK_LAYER
+        self.groups = self.game.all_sprites, self.game.notes
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        self.image = self.game.notes_spritesheet.get_sprite(3, 3, self.width, self.height)
+        self.image.set_colorkey(BLACK)
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = self.x
+        self.rect.y = self.y 
 
 class Button:
     def __init__ (self,x,y,width, height, fg, bg, content, fontsize):

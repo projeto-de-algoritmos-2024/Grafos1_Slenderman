@@ -18,10 +18,10 @@ WHITE = (255,255,255)
 
 tilemap = [ 
     'BBBBBBBBBBBBBBBBBBBB',
-    'B...E.....BB.......B',
+    'B...E....NBB......NB',
     'B..BB....BB..BBBBBBB',
-    'BBBB..B..B..B....BBB',
-    'B.BB..........B....B',
+    'BBBB..B..B..B.N..BBB',
+    'BNBB..........B....B',
     'B...B..B......B....B',
     'BB...BB...BB..B....B',
     'B..BB.....P....B..BB',
@@ -30,7 +30,7 @@ tilemap = [
     'B..B..B..B...BB....B',
     'B.........B..B.....B',
     'B...B..B..BB.B.....B',
-    'B.B..BB..B...B.....B',
+    'B.B..BBN.BN..B....NB',
     'BBBBBBBBBBBBBBBBBBBB',
 ]
 
