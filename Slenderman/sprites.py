@@ -385,6 +385,7 @@ class Button:
     def __init__ (self,x,y,width, height, fg, bg, content, fontsize):
         self.font = pygame.font.Font('Slender.ttf', fontsize)
         self.content = content
+        self.selected = False
 
         self.x = x
         self.y = y

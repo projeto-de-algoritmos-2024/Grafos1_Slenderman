@@ -125,27 +125,106 @@ class Game:
     def intro_screen(self):
         intro = True
 
+        button_width, button_height = 100, 50
+        button_x = (WIN_WIDTH - button_width) // 2
+        play_button_y = (WIN_HEIGHT - button_height) // 2
+        info_button_y = play_button_y + 60  # Colocando o botão "Informações" logo abaixo do botão "Play"
+
         title = self.font.render('SLENDERMAN', True, WHITE)
-        title_rect = title.get_rect(x=10, y=10)
-        play_button = Button (10, 50, 100, 50, WHITE, BLACK, 'Play', 32)
+        title_rect = title.get_rect(center=(WIN_WIDTH // 2, play_button_y - 40))
+
+        play_button = Button(button_x, play_button_y, button_width, button_height, WHITE, BLACK, 'Play', 32)
+        info_button = Button(button_x, info_button_y, button_width, button_height, WHITE, BLACK, 'Info', 32)
+
+        selected_button_index = 0
+        buttons = [play_button, info_button]
 
         while intro:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     intro = False
                     self.running = False
-            
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        if selected_button_index == 0:
+                            intro = False
+                        elif selected_button_index == 1:
+                            self.show_info_screen()
+                    elif event.key == pygame.K_DOWN:
+                        selected_button_index = (selected_button_index + 1) % len(buttons)
+                    elif event.key == pygame.K_UP:
+                        selected_button_index = (selected_button_index - 1) % len(buttons)
+
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
 
-            if play_button.is_pressed(mouse_pos, mouse_pressed):
-                intro = False
+            for i, button in enumerate(buttons):
+                if button.is_pressed(mouse_pos, mouse_pressed):
+                    if i == 0:
+                        intro = False
+                    elif i == 1:
+                        self.show_info_screen()
 
-            self.screen.blit(self.intro_background, (0,0))
+            # Desenha o fundo e os elementos da tela de introdução
+            self.screen.blit(self.intro_background, (0, 0))
             self.screen.blit(title, title_rect)
-            self.screen.blit(play_button.image, play_button.rect)
+
+            # Desenha os botões
+            for i, button in enumerate(buttons):
+                self.screen.blit(button.image, button.rect)
+
+            # Desenha a borda ao redor do botão selecionado
+            selected_button = buttons[selected_button_index]
+            border_rect = selected_button.rect.inflate(10, 10)
+            pygame.draw.rect(self.screen, WHITE, border_rect, 2)
+
+            # Atualiza a tela
             self.clock.tick(FPS)
             pygame.display.update()
+
+    def show_info_screen(self):
+        info = True
+
+        # Texto de informações
+        info_text_lines = [
+            'O jogo se passa em um mundo', 
+            ' distopico onde voce eh', 
+            'perseguido por Slenderman.',
+            'Seu objetivo eh coletar', 
+            'todas as notas sem ser pego', 
+            'para conseguir sobreviver.',
+            '',
+            'Controles:',
+            '',
+            ' W                   ^',
+            'A  D            <    >',
+            ' S                  v',
+            'Pressione Enter para voltar'
+        ]
+
+        # Renderiza cada linha do texto de informações e a armazena em uma lista
+        rendered_lines = [self.font.render(line, True, WHITE) for line in info_text_lines]
+
+        while info:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    info = False
+                    self.running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:
+                        info = False
+
+            self.screen.fill(BLACK)
+
+            
+            start_y = WIN_HEIGHT // 2 - (len(rendered_lines) * 20) // 2
+            for i, line in enumerate(rendered_lines):
+                line_rect = line.get_rect(center=(WIN_WIDTH // 2, start_y + i * 30))
+                self.screen.blit(line, line_rect)
+
+            pygame.display.update()
+            self.clock.tick(FPS)
+
 
     def show_victory_screen(self):
         text = self.font.render('You Won', True, WHITE)
@@ -164,6 +243,8 @@ class Game:
 
             if continue_button.is_pressed(mouse_pos, mouse_pressed):
                 self.running = False  
+
+            
 
             self.screen.fill(BLACK)
             self.screen.blit(text, text_rect)
