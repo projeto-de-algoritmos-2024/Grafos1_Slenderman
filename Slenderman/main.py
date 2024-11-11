@@ -100,12 +100,26 @@ class Game:
             self.draw()
 
     def game_over(self):
-        text = self.font.render('Game Over', True, WHITE)
-        text_rect = text.get_rect(center=(WIN_HEIGHT/2, WIN_HEIGHT/2))
+        large_font = pygame.font.Font('./Slender.ttf', 64)
         
+        text = large_font.render('Game Over', True, WHITE)
+        text_rect = text.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2 - 40))
 
-        restart_button = Button(10, WIN_HEIGHT - 60, 120, 50, WHITE, BLACK, 'Restart', 32)
+        # Posição dos botões centralizados abaixo do texto de Game Over
+        button_width, button_height = 150, 50
+        button_x = (WIN_WIDTH - button_width) // 2
+        restart_button_y = WIN_HEIGHT / 2 + 20
+        exit_button_y = restart_button_y + button_height + 20
 
+        # Criação dos botões
+        restart_button = Button(button_x, restart_button_y, button_width, button_height, WHITE, BLACK, 'Restart', 32)
+        exit_button = Button(button_x, exit_button_y, button_width, button_height, WHITE, BLACK, 'Exit', 32)
+
+        # Índice para controlar qual botão está selecionado
+        selected_button_index = 0
+        buttons = [restart_button, exit_button]
+
+        # Limpa os sprites para exibir a tela de Game Over
         for sprite in self.all_sprites:
             sprite.kill()
 
@@ -113,19 +127,44 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        if selected_button_index == 0:  # Restart
+                            self.new()
+                            self.main()
+                        elif selected_button_index == 1:  # Exit
+                            self.running = False
+                    elif event.key == pygame.K_DOWN:
+                        selected_button_index = (selected_button_index + 1) % len(buttons)
+                    elif event.key == pygame.K_UP:
+                        selected_button_index = (selected_button_index - 1) % len(buttons)
 
+            # Verifica clique do mouse nos botões
             mouse_pos = pygame.mouse.get_pos()
             mouse_pressed = pygame.mouse.get_pressed()
+            for i, button in enumerate(buttons):
+                if button.is_pressed(mouse_pos, mouse_pressed):
+                    if i == 0:
+                        self.new()
+                        self.main()
+                    elif i == 1:
+                        self.running = False
 
-            if restart_button.is_pressed(mouse_pos, mouse_pressed):
-                self.new()
-                self.main()
-
-            self.screen.blit(self.go_background, (0,0))
+            # Desenha o fundo de Game Over e os botões
+            self.screen.blit(self.go_background, (0, 0))
             self.screen.blit(text, text_rect)
-            self.screen.blit(restart_button.image, restart_button.rect)
+            for button in buttons:
+                self.screen.blit(button.image, button.rect)
+
+            # Desenha uma borda ao redor do botão selecionado
+            selected_button = buttons[selected_button_index]
+            border_rect = selected_button.rect.inflate(10, 10)
+            pygame.draw.rect(self.screen, WHITE, border_rect, 2)
+
+            # Atualiza a tela
             self.clock.tick(FPS)
             pygame.display.update()
+
 
     def intro_screen(self):
         intro = True
@@ -135,7 +174,9 @@ class Game:
         play_button_y = (WIN_HEIGHT - button_height) // 2
         info_button_y = play_button_y + 60
 
-        title = self.font.render('SLENDERMAN', True, WHITE)
+        large_font = pygame.font.Font('./Slender.ttf', 64)
+
+        title = large_font.render('SLENDERMAN', True, WHITE)
         title_rect = title.get_rect(center=(WIN_WIDTH // 2, play_button_y - 40))
 
         play_button = Button(button_x, play_button_y, button_width, button_height, WHITE, BLACK, 'Play', 32)

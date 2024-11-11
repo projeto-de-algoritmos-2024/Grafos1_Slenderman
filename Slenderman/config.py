@@ -34,5 +34,20 @@ tilemap = [
     'BBBBBBBBBBBBBBBBBBBB',
 ]
 
-
-
+tilemap2 = [ 
+    'BBBBBBBBBBBBBBBBBBBB',
+    'B......E.....N....BB',
+    'B...BB.....BB..B.....',
+    'B....B...B..B..B..BB',
+    'BN.............B..BB',
+    'B.....BB....BB......B',
+    'BB...BB...BB....BNBB',
+    'BN.BB.....P..B...BB.B',
+    'B....BB..BB.B....BBB',
+    'BB....B..B...B....BB',
+    'B..B..B..B...BB...BB',
+    'B.........B..B.....B',
+    'B...B..B..BB.B.....B',
+    'B.B..BBN.BN..B..N.BB',
+    'BBBBBBBBBBBBBBBBBBBB',
+]
