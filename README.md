@@ -1,7 +1,3 @@
-Aqui está um modelo de README ajustado para seu projeto de jogo, destacando o uso de grafos como solicitado.
-
----
-
 # Slenderman
 
 **Número da Lista**: 35  
