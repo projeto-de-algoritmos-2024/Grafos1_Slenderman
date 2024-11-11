@@ -184,8 +184,6 @@ class Game:
 
     def show_info_screen(self):
         info = True
-
-        # Texto de informações
         info_text_lines = [
             'O jogo se passa em um mundo', 
             ' distopico onde voce eh', 
