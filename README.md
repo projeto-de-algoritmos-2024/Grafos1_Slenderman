@@ -12,11 +12,11 @@
 
 ## Sobre
 
-O projeto é um jogo de sobrevivência chamado **Slenderman**, no qual o jogador é perseguido pela criatura Slenderman e deve coletar notas para vencer. Este jogo utiliza conceitos de grafos para construir o mapa e gerenciar o movimento dos inimigos.
+O projeto é um jogo de sobrevivência chamado **Slenderman**, no qual o jogador é perseguido pela criatura Slenderman e deve coletar notas para vencer. Este jogo utiliza conceitos de grafos para construir o mapa e gerenciar o movimento do inimigo.
 
 ### Uso de Grafos
 
-Os grafos foram utilizados para modelar o mapa do jogo como uma grade de posições interconectadas, facilitando a movimentação dos inimigos em direção ao jogador. A estrutura de grafo também permite que o Slenderman e outros inimigos naveguem pelo mapa, escolhendo o caminho mais curto para se aproximar do jogador com base no algoritmo de busca em largura (BFS). Cada nó do grafo representa uma posição acessível no mapa, e cada conexão representa uma passagem entre posições adjacentes.
+Os grafos foram utilizados para modelar o mapa do jogo como uma grade de posições interconectadas, facilitando a movimentação do inimigo em direção ao jogador. A estrutura de grafo também permite que o Slenderman navegue pelo mapa, escolhendo o caminho mais curto para se aproximar do jogador com base no algoritmo de busca em largura (BFS). Cada nó do grafo representa uma posição acessível no mapa, e cada conexão representa uma passagem entre posições adjacentes.
 
 ## Screenshots
 
@@ -44,7 +44,7 @@ Os grafos foram utilizados para modelar o mapa do jogo como uma grade de posiç�
 ### Rodando o jogo
 
 1. Clone o repositório.
-2. Navegue até o diretório do projeto.
+2. Navegue até o diretório do projeto, a pasta Slenderman.
 3. Execute o jogo com o comando:
    ```bash
    python main.py
@@ -53,7 +53,7 @@ Os grafos foram utilizados para modelar o mapa do jogo como uma grade de posiç�
 ## Uso
 
 Ao iniciar o jogo, você verá uma tela de introdução com duas opções: **Play** e **Info**.  
-1. Pressione **Play** para começar.
+1. Pressione **Play** para começar o jogo.
 2. Na tela **Info**, você encontrará as instruções de jogo.
 
 ### Controles

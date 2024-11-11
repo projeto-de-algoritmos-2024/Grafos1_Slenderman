@@ -49,32 +49,30 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x += self.x_change
         self.collide_blocks('x')
+
         self.rect.y += self.y_change
         self.collide_blocks('y')
 
         self.x_change = 0
         self.y_change = 0
 
-    def movement (self):
+    def movement(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.x_change = -PLAYER_SPEED
             self.facing = 'left'
-        if keys [pygame.K_RIGHT] or keys[pygame.K_d]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.x_change = PLAYER_SPEED
             self.facing = 'right'
-        if keys [pygame.K_UP] or keys[pygame.K_w]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.y_change = -PLAYER_SPEED
             self.facing = 'up'
-        if keys [pygame.K_DOWN] or keys[pygame.K_s]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.y_change = PLAYER_SPEED
             self.facing = 'down'
 
         if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]):
             self.moving = False
-
-        self.rect.x += self.x_change
-        self.rect.y += self.y_change
 
     def collide_enemy(self):
         hits = pygame.sprite.spritecollide(self, self.game.enemies, False)
@@ -382,7 +380,7 @@ class Note (pygame.sprite.Sprite):
         self.rect.y = self.y 
 
 class Button:
-    def __init__ (self,x,y,width, height, fg, bg, content, fontsize):
+    def __init__(self, x, y, width, height, fg, bg, content, fontsize):
         self.font = pygame.font.Font('Slender.ttf', fontsize)
         self.content = content
         self.selected = False
@@ -403,8 +401,18 @@ class Button:
         self.rect.y = self.y
 
         self.text = self.font.render(self.content, True, self.fg)
-        self.text_rect = self.text.get_rect(center=(self.width/2, self.height/2))
+        self.text_rect = self.text.get_rect(center=(self.width // 2, self.height // 2))
         self.image.blit(self.text, self.text_rect)
+    
+    def draw(self, screen):
+        if self.selected:
+            self.image.fill((200, 200, 200))
+        else:
+            self.image.fill(self.bg)
+
+        self.image.blit(self.text, self.text_rect)
+        screen.blit(self.image, (self.x, self.y))
+
 
     def is_pressed (self, pos, pressed):
         if self.rect.collidepoint(pos):

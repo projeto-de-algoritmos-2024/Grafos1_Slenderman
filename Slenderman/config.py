@@ -8,8 +8,8 @@ ENEMY_LAYER = 3
 BLOCK_LAYER = 2
 GROUND_LAYER = 1
 
-PLAYER_SPEED = 1.4
-ENEMY_SPEED = 0.1
+PLAYER_SPEED = 2.4
+ENEMY_SPEED = 0.4
 
 RED = (255, 0, 0)
 BLACK = (0 , 0, 0)
@@ -20,7 +20,7 @@ tilemap = [
     'BBBBBBBBBBBBBBBBBBBB',
     'B...E....NBB......NB',
     'B..BB....BB..BBBBBBB',
-    'BBBB..B..B..B.N..BBB',
+    'BBBB...B..B..B.N..BB',
     'BNBB..........B....B',
     'B....BB.......B....B',
     'BB...BB...BB..B....B',

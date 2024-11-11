@@ -6,10 +6,15 @@ import sys
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
+
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
         self.font = pygame.font.Font('./Slender.ttf', 32)
+
+        pygame.mixer.music.load('audio/background_music.mp3')
+        pygame.mixer.music.set_volume(0.8)
 
         self.notes_collected = 0
         self.total_notes = 7
@@ -93,11 +98,11 @@ class Game:
             self.events()
             self.update()
             self.draw()
-        
 
     def game_over(self):
         text = self.font.render('Game Over', True, WHITE)
         text_rect = text.get_rect(center=(WIN_HEIGHT/2, WIN_HEIGHT/2))
+        
 
         restart_button = Button(10, WIN_HEIGHT - 60, 120, 50, WHITE, BLACK, 'Restart', 32)
 
@@ -128,7 +133,7 @@ class Game:
         button_width, button_height = 100, 50
         button_x = (WIN_WIDTH - button_width) // 2
         play_button_y = (WIN_HEIGHT - button_height) // 2
-        info_button_y = play_button_y + 60  # Colocando o botão "Informações" logo abaixo do botão "Play"
+        info_button_y = play_button_y + 60
 
         title = self.font.render('SLENDERMAN', True, WHITE)
         title_rect = title.get_rect(center=(WIN_WIDTH // 2, play_button_y - 40))
@@ -148,6 +153,7 @@ class Game:
                     if event.key == pygame.K_RETURN:
                         if selected_button_index == 0:
                             intro = False
+                            pygame.mixer.music.play(-1)
                         elif selected_button_index == 1:
                             self.show_info_screen()
                     elif event.key == pygame.K_DOWN:
