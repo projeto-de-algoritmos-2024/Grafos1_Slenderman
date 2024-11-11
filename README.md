@@ -22,11 +22,11 @@ Os grafos foram utilizados para modelar o mapa do jogo como uma grade de posiç�
 
 | Tela de Introdução                         | Tela de Jogo                               |
 | ------------------------------------------ | ------------------------------------------ |
-| ![Intro](Slenderman\img/intro.png)                    | ![Game](Slenderman\img/game.png)                      |
+| ![Intro](assets/intro.png)                    | ![Game](assets/game.png)                      |
 
 | Tela de Início do Jogo                     | Tela de Fim de Jogo                        |
 | ------------------------------------------ | ------------------------------------------ |
-| ![Start](Slenderman\img\start.png)                    | ![End](Slenderman\img/end.png)                        |
+| ![Start](assets/start.png)                    | ![End](assets/end.png)                        |
 
 ## Instalação 
 
