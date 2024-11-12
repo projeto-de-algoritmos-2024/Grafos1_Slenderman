@@ -247,8 +247,10 @@ class Game:
             'Pressione Enter para voltar'
         ]
 
-        # Renderiza cada linha do texto de informações e a armazena em uma lista
-        rendered_lines = [self.font.render(line, True, WHITE) for line in info_text_lines]
+        small_font = pygame.font.Font('./Slender.ttf', 24)
+
+        # Renderiza cada linha do texto de informações usando a fonte menor
+        rendered_lines = [small_font.render(line, True, WHITE) for line in info_text_lines]
 
         while info:
             for event in pygame.event.get():
@@ -262,7 +264,7 @@ class Game:
             self.screen.fill(BLACK)
 
             
-            start_y = WIN_HEIGHT // 2 - (len(rendered_lines) * 20) // 2
+            start_y = 30
             for i, line in enumerate(rendered_lines):
                 line_rect = line.get_rect(center=(WIN_WIDTH // 2, start_y + i * 30))
                 self.screen.blit(line, line_rect)
